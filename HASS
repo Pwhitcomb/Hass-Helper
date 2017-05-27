@@ -1,0 +1,106 @@
+#! /bin/bash
+# HASS - A helper script for Home Assistant
+#Variables
+if [ -f /etc/hass/hass.conf ];then
+    . /etc/hass/hass.conf
+fi
+
+
+# Functions
+dnsFunc() {
+	printf "${HASS_tblue}Running DNS ...";
+	"${HASS_DIR}"/dns.sh;
+  resetPrint
+	exit 0;
+}
+
+configFunc() {
+	printf "${HASS_tblue}Running Config ...\n";
+	"${HASS_DIR}"/config.sh;
+  resetPrint
+	exit 0;
+}
+
+mosqFunc() {
+	printf "${HASS_tblue}Running Mosquitto ...\n";
+	"${HASS_DIR}"/mosquitto.sh;
+  resetPrint
+	exit 0;
+}
+
+restartFunc() {
+	printf "${HASS_tblue}Restarting Home Assistant and Mosquitto...\n";
+	"${HASS_DIR}"/restart.sh
+  resetPrint
+	exit 0;
+}
+
+sslFunc() {
+	printf "${HASS_tblue}Running SSL Cert check ...\n"
+	"${HASS_DIR}"/ssl.sh
+  resetPrint
+	exit 0;
+}
+
+startFunc() {
+	printf "${HASS_tblue}Starting Home Assistant ...\n"
+	"${HASS_DIR}"/start.sh
+  resetPrint
+  exit 0;
+}
+
+statusFunc() {
+	printf "${HASS_tblue}Checking status of Home Assistant ...\n"
+	"${HASS_DIR}"/status.sh
+  resetPrint
+	exit 0;
+}
+
+stopFunc() {
+	printf "${HASS_tblue}Stopping Home Assistant ...\n"
+	"${HASS_DIR}"/stop.sh
+  resetPrint
+	exit 0;
+}
+
+updateFunc() {
+	printf "${HASS_tblue}Updating Home Assistant ...\n"
+	"${HASS_DIR}"/update.sh
+  resetPrint
+	exit 0;
+}
+
+resetPrint() {
+  printf "${HASS_treset}";
+  exit 0;
+}
+
+helpFunc() {
+	cat << EOM
+   Options:
+    config	Checks configuration files
+    dns		Force updates DNS to point to the correct IP
+    help, -h	Shows this menu
+    mosquitto	(Does Something)
+    restart	Restarts the Home Assistant Service
+    ssl		Obtains certificate for SSL
+    start	Starts the Home Assistant Service
+    status	Checks the status of the Home Assistant Service
+    stop	Stops the Home Assistant Service
+    update	Updates Home Assistant
+EOM
+	exit 0
+}
+# Menu Selection
+case "${1}" in
+  "config"       ) configFunc;;
+  "dns"          ) dnsFunc;;
+  "mosquitto"    ) mosqFunc;;
+  "restart"      ) restartFunc;;
+  "ssl"          ) sslFunc;;
+  "start"        ) startFunc;;
+  "status"       ) statusFunc;;
+  "stop"         ) stopFunc;;
+  "update"       ) updateFunc;;
+  *              ) helpFunc;;
+esac
